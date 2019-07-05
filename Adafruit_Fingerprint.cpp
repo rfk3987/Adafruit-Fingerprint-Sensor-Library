@@ -7,7 +7,7 @@
   These displays use TTL Serial to communicate, 2 pins are required to
   interface
   Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
+  please support Adafruit and open-sourceshardware by purchasing
   products from Adafruit!
 
   Written by Limor Fried/Ladyada for Adafruit Industries.
@@ -209,6 +209,31 @@ uint8_t Adafruit_Fingerprint::deleteModel(uint16_t location) {
 */
 uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
   SEND_CMD_PACKET(FINGERPRINT_EMPTY);
+}
+
+/**************************************************************************/
+/*!
+    @brief   Ask the sensor to search the current slot 1 fingerprint features to match saved templates. The matching location is stored in <b>fingerID</b> and the matching confidence in <b>confidence</b>
+    @returns <code>FINGERPRINT_OK</code> on fingerprint match success
+    @returns <code>FINGERPRINT_NOTFOUND</code> no match made
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::fingerSearch(void) {
+  // high speed search of slot #1 starting at page 0x0000 and page #0x00A3
+  GET_CMD_PACKET(FINGERPRINT_NORMALSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3);
+  fingerID = 0xFFFF;
+  confidence = 0xFFFF;
+
+  fingerID = packet.data[1];
+  fingerID <<= 8;
+  fingerID |= packet.data[2];
+
+  confidence = packet.data[3];
+  confidence <<= 8;
+  confidence |= packet.data[4];
+
+  return packet.data[0];
 }
 
 /**************************************************************************/

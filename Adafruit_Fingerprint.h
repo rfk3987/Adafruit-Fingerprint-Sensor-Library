@@ -60,6 +60,7 @@
 
 #define FINGERPRINT_GETIMAGE 0x01
 #define FINGERPRINT_IMAGE2TZ 0x02
+#define FINGERPRINT_NORMALSEARCH 0X04
 #define FINGERPRINT_REGMODEL 0x05
 #define FINGERPRINT_STORE 0x06
 #define FINGERPRINT_LOAD 0x07
@@ -125,6 +126,7 @@ class Adafruit_Fingerprint {
   uint8_t loadModel(uint16_t id);
   uint8_t getModel(void);
   uint8_t deleteModel(uint16_t id);
+  uint8_t fingerSearch(void);
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
   uint8_t setPassword(uint32_t password);
